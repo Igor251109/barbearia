@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIN DE CLIENTES</title>
+</head>
+<body>
+    <h1>BEM VINDO(A) DE VOLTA!</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" required>
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+
+        <button type="submit">FAZER LOGIN</button>
+    </form>
+
+        {% if erro %}
+            <p>{{ erro }}</p>
+        {% endif %}
+</body>
+</html>

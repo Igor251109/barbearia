@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar horários</title>
+</head>
+<body>
+
+    <h1>Gerenciar horários de funcionamento</h1>
+
+    <!-- Exibe mensagens de erro da validação. -->
+    {% if erro %}
+        <p style="color: red;">{{ erro }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for dia in dias %}
+            <div>
+                <h3>{{ dia.nome }}</h3>
+
+                <label>
+                    <input
+                        type="checkbox"
+                        name="funciona_{{ dia.numero }}"
+                        {% if dia.funciona %}checked{% endif %}
+                    >
+                    Aberto neste dia
+                </label>
+
+                <br>
+
+                <label>
+                    Abertura:
+                    <input
+                        type="time"
+                        name="abertura_{{ dia.numero }}"
+                        value="{{ dia.abertura }}"
+                    >
+                </label>
+
+                <label>
+                    Fechamento:
+                    <input
+                        type="time"
+                        name="fechamento_{{ dia.numero }}"
+                        value="{{ dia.fechamento }}"
+                    >
+                </label>
+            </div>
+
+            <hr>
+        {% endfor %}
+
+        <button type="submit">Salvar horários</button>
+    </form>
+
+    <!--
+    O que estamos fazendo:
+
+    - funciona_0: indica se segunda-feira está aberta.
+    - abertura_0: horário de abertura de segunda-feira.
+    - fechamento_0: horário de fechamento de segunda-feira.
+
+    E assim por diante até domingo (_6).
+
+    A view prepara os valores de cada dia.
+    O HTML apenas recebe e exibe essas informações.
+
+    Se ocorrer um erro, os valores digitados são preservados.
+    -->
+
+</body>
+</html>

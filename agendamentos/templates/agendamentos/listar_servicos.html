@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LISTAR SERVIÇOS</title>
+</head>
+<body>
+
+    <div id="listar_servicos">
+        <h2>Nossos Serviços</h2>
+
+        <ul>
+            {% for servico in servicos %}
+                <li>
+                    <h3>{{ servico.nome }}</h3>
+
+                    <p>R$ {{ servico.preco }}</p>
+
+                    <p>{{ servico.duracao }} minutos</p>
+
+                    <!-- Envia o cliente para a página do serviço escolhido. -->
+                    <form method="GET" action="{% url 'agendar' %}">
+                        <input
+                            type="hidden"
+                            name="servico"
+                            value="{{ servico.id }}"
+                        >
+
+                        <button type="submit">SELECIONAR</button>
+                    </form>
+                </li>
+
+            {% empty %}
+                <li>Nenhum serviço disponível.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>

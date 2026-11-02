@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Permite que a página se adapte a celulares e computadores. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agendar horário</title>
+</head>
+
+<body>
+
+    <main>
+
+        <h1>Agendar horário</h1>
+        {% if erro %}
+            <p style="color: red;">{{ erro }}</p>
+        {% endif %}
+
+        <!-- Exibe as informações do serviço selecionado pelo cliente. -->
+        <section>
+            <h2>Serviço escolhido</h2>
+
+            <h3>{{ servico.nome }}</h3>
+
+            <p>
+                Preço: R$ {{ servico.preco }}
+            </p>
+
+            <p>
+                Duração: {{ servico.duracao }} minutos
+            </p>
+        </section>
+
+        <!-- Posteriormente, adicionaremos a seleção de horários disponíveis. -->
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="servico" value="{{ servico.id }}">
+
+            <!-- Permite que o cliente escolha a data desejada. -->
+            <section>
+                <h2>Escolha a data</h2>
+
+                <label for="data">Data do agendamento:</label>
+
+                <input
+                    type="date"
+                    id="data"
+                    name="data"
+                    value="{{ data_selecionada }}"
+                    required
+                >
+            </section>
+
+            <button type="submit">Continuar</button>
+
+            <!-- Permite que o cliente escolha o horário desejado. -->
+            <section>
+                <h2>Escolha o horário</h2>
+
+                <label for="horario">Horário do agendamento:</label>
+
+                <input
+                    type="time"
+                    id="horario"
+                    name="horario"
+                    value="{{ horario_selecionado }}"
+                    required
+                >
+            </section>
+        </form>
+
+
+    </main>
+
+</body>
+</html>

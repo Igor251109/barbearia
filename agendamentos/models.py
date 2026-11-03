@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from datetime import datetime, timedelta
 
 # Create your models here.
 
@@ -71,3 +72,56 @@ class HorarioFuncionamento(models.Model):
         # constraints: define restrições no banco de dados.
         # UniqueConstraint: impede valores duplicados.
         # fields=["dia_semana"]: determina que o dia da semana não pode se repetir.
+
+class BloqueioAgenda(models.Model):
+    data = models.DateField()
+    horario_inicio = models.TimeField()
+    horario_fim = models.TimeField()
+    motivo = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return f"{self.data} - {self.horario_inicio} até {self.horario_fim}"
+
+    def clean(self):
+        super().clean()
+
+        if self.horario_fim <= self.horario_inicio:
+            raise ValidationError(
+                "O horário final deve ser posterior ao horário inicial."
+            )
+
+        bloqueios = BloqueioAgenda.objects.filter(data=self.data)
+
+        if self.pk:
+            bloqueios = bloqueios.exclude(pk=self.pk)
+
+        for bloqueio in bloqueios:
+            if (
+                self.horario_inicio < bloqueio.horario_fim
+                and self.horario_fim > bloqueio.horario_inicio
+            ):
+                raise ValidationError(
+                    "Esse período já possui um bloqueio."
+                )
+
+        agendamentos = Agendamento.objects.filter(data=self.data).select_related("servico")
+
+        for agendamento in agendamentos:
+
+            # Calcula o início do agendamento.
+            inicio_agendamento = agendamento.horario
+
+            # Calcula o término considerando a duração do serviço.
+            fim_agendamento = (
+                datetime.combine(self.data, inicio_agendamento)
+                + timedelta(minutes=agendamento.servico.duracao)
+            ).time()
+
+            # Verifica se o bloqueio coincide com o agendamento.
+            if (
+                self.horario_inicio < fim_agendamento
+                and self.horario_fim > inicio_agendamento
+            ):
+                raise ValidationError(
+                    "Não é possível bloquear um horário que já possui agendamento."
+                )

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerenciar agendamentos | Igor Rocha Barbearia</title>
+</head>
+<body>
+
+    <h1>Agendamentos da barbearia</h1>
+
+    <!-- Filtro por data -->
+    <form method="GET">
+
+        <label for="data">Consultar agenda por data:</label>
+
+        <input
+            type="date"
+            id="data"
+            name="data"
+            value="{{ data_selecionada }}"
+        >
+
+        <button type="submit">Consultar</button>
+
+        <a href="{% url 'gerenciar_agendamentos' %}">
+            Ver todos
+        </a>
+
+    </form>
+
+    <hr>
+
+    <h2>
+        {% if data_selecionada %}
+            Agendamentos de {{ data_selecionada|date:"d/m/Y" }}
+        {% else %}
+            Todos os agendamentos
+        {% endif %}
+    </h2>
+
+    {% for agendamento in agendamentos %}
+
+        <div class="agendamento">
+
+            <h3>{{ agendamento.cliente.nome }}</h3>
+
+            <p>
+                <strong>Telefone:</strong>
+                {{ agendamento.cliente.telefone }}
+            </p>
+
+            <p>
+                <strong>Serviço:</strong>
+                {{ agendamento.servico.nome }}
+            </p>
+
+            <p>
+                <strong>Preço:</strong>
+                R$ {{ agendamento.servico.preco }}
+            </p>
+
+            <p>
+                <strong>Data:</strong>
+                {{ agendamento.data|date:"d/m/Y" }}
+            </p>
+
+            <p>
+                <strong>Horário:</strong>
+                {{ agendamento.horario|time:"H:i" }}
+            </p>
+
+            <!-- Formulário de cancelamento -->
+            <form
+                method="POST"
+                action="{% url 'cancelar_agendamento_profissional' agendamento.id %}"
+            >
+                {% csrf_token %}
+
+                <button type="submit">
+                    Cancelar agendamento
+                </button>
+
+            </form>
+
+        </div>
+
+        <hr>
+
+    {% empty %}
+
+        {% if data_selecionada %}
+            <p>Não existem agendamentos para esta data.</p>
+        {% else %}
+            <p>Não existem agendamentos registrados.</p>
+        {% endif %}
+
+    {% endfor %}
+
+</body>
+</html>

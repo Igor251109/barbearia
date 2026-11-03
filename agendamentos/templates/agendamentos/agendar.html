@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -38,7 +40,7 @@
 
         <form method="POST">
             {% csrf_token %}
-            <input type="hidden" name="servico" value="{{ servico.id }}">
+            <input type="hidden" id="servico" name="servico" value="{{ servico.id }}">
 
             <!-- Permite que o cliente escolha a data desejada. -->
             <section>
@@ -55,25 +57,23 @@
                 >
             </section>
 
-            <button type="submit">Continuar</button>
-
             <!-- Permite que o cliente escolha o horário desejado. -->
             <section>
                 <h2>Escolha o horário</h2>
 
                 <label for="horario">Horário do agendamento:</label>
 
-                <input
-                    type="time"
-                    id="horario"
-                    name="horario"
-                    value="{{ horario_selecionado }}"
-                    required
-                >
+                <div id="horarios-disponiveis">
+                    <p>Selecione uma data para consultar os horários.</p>
+                </div>
+
+                <input type="hidden" id="horario" name="horario" required>
             </section>
+            <button type="submit">Continuar</button>
         </form>
+        
 
-
+        <script src="{% static 'agendamentos/js/agendar.js' %}"></script>
     </main>
 
 </body>

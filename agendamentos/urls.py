@@ -12,5 +12,12 @@ urlpatterns = [
     path("servicos-disponiveis/", views.listar_servicos_publicos, name="listar_servicos_publicos"),
     path("cliente/cadastrar/", views.cadastrar_cliente, name="cadastrar_cliente"),
     path("cliente/login/", views.login_cliente, name="login_cliente"),
-    path("horarios/", views.gerenciar_horarios, name="horarios")
+    path("horarios/", views.gerenciar_horarios, name="horarios"),
+    path("horarios-disponiveis/", views.horarios_disponiveis, name="horarios_disponiveis"),
+    path("bloqueios/", views.gerenciar_bloqueios, name="bloqueios"),
+    path("minhas-reservas/", views.meus_agendamentos, name="meus_agendamentos"),
+    path("cancelar-agendamento/<int:id>/", views.cancelar_agendamento, name="cancelar_agendamento"),
+    path("agendamentos/", views.gerenciar_agendamentos, name="gerenciar_agendamentos"),
+    path("cancelar-agendamento-profissional/<int:id>/", views.cancelar_agendamento_profissional, name="cancelar_agendamento_profissional"
+),
 ]

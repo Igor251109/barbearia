@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meus agendamentos | Igor Rocha Barbearia</title>
+</head>
+<body>
+
+    <h1>Meus agendamentos</h1>
+
+    {% for agendamento in agendamentos %}
+
+        <div class="agendamento">
+
+            <h2>{{ agendamento.servico.nome }}</h2>
+
+            <p>
+                <strong>Preço:</strong>
+                R$ {{ agendamento.servico.preco }}
+            </p>
+
+            <p>
+                <strong>Data:</strong>
+                {{ agendamento.data|date:"d/m/Y" }}
+            </p>
+
+            <p>
+                <strong>Horário:</strong>
+                {{ agendamento.horario|time:"H:i" }}
+            </p>
+
+            <form method="POST" action="{% url 'cancelar_agendamento' agendamento.id %}">
+                {% csrf_token %}
+
+                <button type="submit">
+                    Cancelar agendamento
+                </button>
+            </form>
+
+        </div>
+
+        <hr>
+
+    {% empty %}
+
+        <p>Você ainda não possui agendamentos.</p>
+
+    {% endfor %}
+
+</body>
+</html>
